@@ -5,11 +5,21 @@
 }
 
 :root {
-  --bg: #1e1e2e;
-  --text: #cdd6f4;
-  --sub-text: #bac2de;
-  --accent: #cba6f7;
-  --primary: #89b4fa;
+  @media (prefers-color-scheme: dark) {
+    --bg: #1e1e2e;
+    --text: #cdd6f4;
+    --sub-text: #bac2de;
+    --accent: #cba6f7;
+    --primary: #89b4fa;
+  }
+
+  @media (prefers-color-scheme: light) {
+    --bg: #eff1f5;
+    --text: #4c4f69;
+    --sub-text: #5c5f77;
+    --accent: #1e66f5;
+    --primary: #8839ef;
+  }
 }
 
 html,
@@ -130,8 +140,10 @@ body {
 }
 
 .previewer .panel {
-  width: 100%;
-  height: fit-content;
+  height: 100%;
+  width: 320px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .label-info .item {
@@ -162,16 +174,16 @@ body {
 }
 
 .alert {
-  width: fit-content;
+  width: 100%;
   padding: 12px 24px;
   background: var(--sub-text);
   color: var(--bg);
   transition: all 0.5 ease;
   position: fixed;
-  bottom: 1%;
-  right: 0.5%;
-  border-radius: 8px;
+  top: 0;
+  left: 0;
   font-size: 12px;
+  text-align: center;
 }
 
 .quality-ctrl.disable {
