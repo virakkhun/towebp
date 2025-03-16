@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ToWebP</title>
+    <link rel="stylesheet" type="text/css" href="./index.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="ToWebP" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+  </head>
+  <body>
+    <p id="alert" class="alert" hidden></p>
+    <main id="app" class="app flex-col gap-lg">
+      <div class="flex-col gap-sm">
+        <h1 class="text">Convert image to WebP</h1>
+        <p class="sub-text">locally convert an image to WebP</p>
+      </div>
+
+      <div class="converter">
+        <label class="file-picker" for="file" id="drag-zone">
+          <p>
+            drag & drop |
+            <span class="text-primary cursor-pointer">browse</span>
+          </p>
+          <input type="file" id="file" hidden />
+        </label>
+      </div>
+
+      <div class="quality-ctrl flex-col gap-sm">
+        <input type="range" min="1" max="100" value="80" id="quality-ctrl" />
+
+        <label class="flex-col flex-row gap-sm" for="quality-ctrl">
+          <span>Quality:</span>
+          <span class="value"></span>
+        </label>
+      </div>
+
+      <div class="previewer flex-col inactive" id="previewer">
+        <p class="label sub-text">Preview</p>
+        <div class="flex-col image-container">
+          <img class="panel" />
+          <p class="loading" hidden>loading...</p>
+        </div>
+      </div>
+
+      <div class="label-info flex-col flex-row gap-sm" id="label-info"></div>
+
+      <div class="action">
+        <a type="button" id="btn" class="btn-convert">Download WebP</a>
+      </div>
+    </main>
+
+    <script src="./lib/webp.js"></script>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
