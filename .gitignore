@@ -1,3 +1,6 @@
 libwebp
 emsdk
 lib/stb_image.h
+lib/*.h
+lib/*.c
+lib/makefile
