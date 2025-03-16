@@ -7,10 +7,12 @@ export class DownloadBtn {
   }
 
   disable() {
+    this.el.setAttribute("hidden", "true");
     this.el.classList.add("inactive");
   }
 
   enable() {
+    this.el.removeAttribute("hidden");
     this.el.classList.remove("inactive");
   }
 
