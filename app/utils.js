@@ -29,3 +29,19 @@ export function formatFileSize(bytes) {
 export function supportedTypes(type) {
   return ["image/jpeg", "image/jpg", "image/png"].includes(type);
 }
+
+/**
+ * @param {WorkerInput} input
+ * @returns {WorkerInput}
+ **/
+export function buildWorkerInput(input) {
+  return input;
+}
+
+/**
+ * @param {WorkerOutput} output
+ * @returns {WorkerOutput}
+ **/
+export function buildWorkerOutput(output) {
+  return output;
+}

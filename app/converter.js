@@ -1,16 +1,10 @@
 import { supportedTypes } from "./utils.js";
 
-const wasmAPI = {
-  toWebp: Module._to_webp,
-  freeWebPBuffer: Module._free_webp_buffer,
-};
-
 /**
  * @typedef {Object} ConvertConfig
- * @property {number} quality
- * @property {() => void} onStart
+ * @property {Object} api
  * @property {(data: {blob: Blob, originalFileName: string}) => void} onFinish
- * @property {() => void} onMessage
+ * @property {(msg: string) => void} onError
  */
 
 export class Converter {
@@ -24,43 +18,42 @@ export class Converter {
 
   /**
    * @param {File} file
+   * @param {number} quality
    */
-  convert(file) {
+  convert(file, quality) {
     if (!supportedTypes(file.type)) {
-      this.#config.onMessage("File type not supported...");
+      this.#config.onError("File type not supported...");
       return;
     }
 
     const reader = new FileReader();
 
-    this.#config.onStart();
-
     reader.addEventListener("load", (e) => {
       const arrayBuffer = e.target.result;
       const buf = new Uint8Array(arrayBuffer);
 
-      const inputPtr = Module._malloc(buf.byteLength);
-      const outputSizePtr = Module._malloc(4);
+      const inputPtr = this.#config.api._malloc(buf.byteLength);
+      const outputSizePtr = this.#config.api._malloc(4);
 
-      Module.HEAP8.set(buf, inputPtr);
+      this.#config.api.HEAP8.set(buf, inputPtr);
 
-      const resultPtr = wasmAPI.toWebp(
+      const resultPtr = this.#config.api._to_webp(
         inputPtr,
         buf.byteLength,
-        this.#config.quality,
+        quality,
         outputSizePtr,
       );
-      const outputSize = Module.HEAP32[outputSizePtr / 4];
+      const outputSize = this.#config.api.HEAP32[outputSizePtr / 4];
 
       if (resultPtr && outputSize > 0) {
         const resultView = new Uint8Array(
-          Module.HEAP8.buffer,
+          this.#config.api.HEAP8.buffer,
           resultPtr,
           outputSize,
         );
         const result = new Uint8Array(resultView);
 
-        Module._free_webp_buffer(resultPtr);
+        this.#config.api._free_webp_buffer(resultPtr);
         const blob = new Blob([result], { type: "image/webp" });
 
         this.#config.onFinish({
@@ -68,10 +61,11 @@ export class Converter {
           originalFileName: file.name,
         });
       } else {
-        this.#config.onMessage();
+        this.#config.onError("Something went wrong...");
       }
 
-      Module._free(inputPtr);
+      this.#config.api._free(outputSizePtr);
+      this.#config.api._free(inputPtr);
     });
 
     reader.readAsArrayBuffer(file);

@@ -3,7 +3,7 @@ export class DragDrop {
 
   /**
    * @typedef {Object} Callback
-   * @prop {(file: File) => void} fn
+   * @prop {(file: FileList) => void} fn
    *
    * @param {Callback} callback
    */
@@ -27,10 +27,10 @@ export class DragDrop {
     this.el.addEventListener("drop", (ev) => {
       ev.preventDefault();
 
-      const file = ev.dataTransfer.files[0];
-      if (!file) return;
+      const files = ev.dataTransfer.files;
+      if (!files) return;
 
-      callback.fn(file);
+      callback.fn(files);
 
       this.el.classList.remove("enter");
       this.el.classList.remove("dragging");

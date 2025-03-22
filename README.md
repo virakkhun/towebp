@@ -15,9 +15,13 @@ wasm was build from c lib, and trasnform to wasm.
 
 ```js
 Module._to_webp(
-  buffer: Unit8Array,
+  buffer: Uint8Array,
   bufferLength: number,
   quality: number,
-  outputSize: Unit8Array
+  outputSize: Uint8Array
 )
 ```
+
+## Website Theme
+
+[catppuccin](https://catppuccin.com/palette/)

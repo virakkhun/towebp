@@ -90,48 +90,35 @@
     </script>
   </head>
   <body>
-    <p id="alert" class="alert" hidden></p>
-    <main id="app" class="app flex-col gap-lg">
-      <div class="flex-col gap-sm">
-        <h1 class="text">Convert image to WebP</h1>
-        <p class="sub-text">Locally convert an image to WebP</p>
+    <main id="app" class="app">
+      <div class="hero">
+        <h1 class="title">Convert image to WebP</h1>
+        <p class="desc">Locally convert an image to WebP</p>
       </div>
 
       <div class="converter">
         <label class="file-picker" for="file" id="drag-zone">
           <p>
             drag & drop |
-            <span class="text-primary cursor-pointer">browse</span>
+            <span class="text primary">browse</span>
           </p>
-          <input type="file" id="file" hidden />
+          <input multiple type="file" id="file" hidden />
         </label>
       </div>
 
-      <div class="quality-ctrl flex-col gap-sm">
-        <input type="range" min="1" max="100" value="80" id="quality-ctrl" />
+      <p class="feedback"></p>
 
-        <label class="flex-col flex-row gap-sm" for="quality-ctrl">
+      <div class="quality-ctrl">
+        <label class="label" for="quality-ctrl">
           <span>Quality:</span>
           <span class="value"></span>
         </label>
+        <input type="range" min="1" max="100" value="80" id="quality-ctrl" />
       </div>
 
-      <div class="previewer flex-col inactive" id="previewer">
-        <p class="label sub-text">Preview</p>
-        <div class="flex-col image-container">
-          <img class="panel" hidden />
-          <p class="loading" hidden>loading...</p>
-        </div>
-      </div>
-
-      <div class="label-info flex-col flex-row gap-sm" id="label-info"></div>
-
-      <div class="action">
-        <a type="button" id="btn" class="btn-convert" hidden>Download WebP</a>
-      </div>
+      <div class="result"></div>
     </main>
 
-    <script src="./lib/webp.js"></script>
     <script type="module" src="./main.js"></script>
   </body>
 </html>

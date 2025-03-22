@@ -3,17 +3,20 @@ export class InputCtrl {
 
   /**
    * @typedef {Object} Callback
-   * @prop {(file: File) => void} fn
+   * @prop {(file: FileList) => void} fn
    *
    * @param {Callback} callback
    */
   onChange(callback) {
     this.el.addEventListener("change", (e) => {
-      const file = e.target.files[0];
+      e.preventDefault();
+      e.stopImmediatePropagation();
 
-      if (!file) return;
+      const files = e.target.files;
 
-      callback.fn(file);
+      if (!files) return;
+
+      callback.fn(files);
     });
   }
 }

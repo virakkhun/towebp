@@ -1,42 +1,77 @@
-import { Previewer } from "./app/previewer.js";
-import { DownloadBtn } from "./app/download.js";
 import { Quality } from "./app/quality.js";
-import { Alert } from "./app/alert.js";
-import { Info } from "./app/info.js";
-import { toWebPFile } from "./app/utils.js";
+import { buildWorkerInput, formatFileSize, toWebPFile } from "./app/utils.js";
 import { DragDrop } from "./app/dragdrop.js";
-import { Converter } from "./app/converter.js";
 import { InputCtrl } from "./app/input.js";
+import { WebPResult } from "./app/webp-result.js";
+import { WORKER_STATE } from "./app/const.js";
+import { Feedback } from "./app/feedback.js";
+import { FileCtrl } from "./app/file-ctrl.js";
 
-if (!Module) throw new Error("Failed to load wasm module");
-
-const previewer = new Previewer();
-const btn = new DownloadBtn();
-const info = new Info();
-const message = new Alert();
+const worker = new Worker("./worker.js");
+const feedback = new Feedback();
 const quality = new Quality();
-
-const converter = new Converter({
-  quality: parseFloat(quality.value),
-  onFinish: ({ blob, originalFileName }) => {
-    const url = URL.createObjectURL(blob);
-    previewer.preview(url, toWebPFile(originalFileName));
-    btn.enableDownload(url, toWebPFile(originalFileName));
-    info.showInfo(blob.size);
-  },
-  onStart: () => previewer.start(),
-  onMessage: (msg) => {
-    message.showAlert(msg ?? "Something went wrong...");
-    previewer.disable();
-  },
-});
-
+const result = new WebPResult();
 const dragDrop = new DragDrop();
 const inputCtrl = new InputCtrl();
+const fileCtrl = new FileCtrl();
 
-dragDrop.onDragDrop({
-  fn: (file) => converter.convert(file),
-});
-inputCtrl.onChange({
-  fn: (file) => converter.convert(file),
-});
+/** @type {{fn: (files: FileList) => void}} */
+const SetupFiles = {
+  fn: (files) => {
+    fileCtrl.setFiles(files, (file) => {
+      feedback.show("converting...");
+      worker.postMessage(
+        buildWorkerInput({
+          file,
+          quality: quality.value,
+        }),
+      );
+    });
+  },
+};
+
+dragDrop.onDragDrop(SetupFiles);
+inputCtrl.onChange(SetupFiles);
+
+worker.postMessage(
+  buildWorkerInput({
+    state: WORKER_STATE.INITIAL_DEP,
+  }),
+);
+worker.onmessage = ({ data }) => {
+  /** @type {WorkerOutput} */
+  const out = data;
+
+  if (out.state === WORKER_STATE.DONE) {
+    const {
+      result: { url, size, originalFileName },
+    } = out;
+    result.new(url, formatFileSize(size), toWebPFile(originalFileName));
+    fileCtrl.incrementCompleted();
+  }
+
+  const nextAble = [WORKER_STATE.DONE, WORKER_STATE.ERROR].includes(out.state);
+  if (fileCtrl.maxIndex !== fileCtrl.index && nextAble) {
+    fileCtrl.next((file) => {
+      worker.postMessage(
+        buildWorkerInput({
+          file,
+          quality: quality.value,
+        }),
+      );
+    });
+  }
+
+  if (out.state === WORKER_STATE.ERROR) {
+    result.feedbackOnError(
+      fileCtrl.files[fileCtrl.index].name,
+      out.result.error,
+    );
+    fileCtrl.incrementCompleted();
+  }
+
+  if (fileCtrl.total === fileCtrl.completed && nextAble) {
+    feedback.show("success...");
+    feedback.hide();
+  }
+};
