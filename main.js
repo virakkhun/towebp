@@ -6,7 +6,9 @@ import { WebPResult } from "./app/webp-result.js";
 import { WORKER_STATE } from "./app/const.js";
 import { Feedback } from "./app/feedback.js";
 import { FileCtrl } from "./app/file-ctrl.js";
+import { SupportedInputBadge } from "./app/supported-input-badge.js";
 
+new SupportedInputBadge();
 const worker = new Worker("./worker.js");
 const feedback = new Feedback();
 const quality = new Quality();

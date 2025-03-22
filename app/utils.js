@@ -1,3 +1,5 @@
+import { SUPPORTED_INPUT } from "./const.js";
+
 /**
  * @param {string} name
  * @returns {string}
@@ -27,7 +29,7 @@ export function formatFileSize(bytes) {
  * @returns {boolean}
  */
 export function supportedTypes(type) {
-  return ["image/jpeg", "image/jpg", "image/png"].includes(type);
+  return SUPPORTED_INPUT.includes(type);
 }
 
 /**

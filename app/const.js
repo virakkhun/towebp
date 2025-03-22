@@ -5,3 +5,5 @@ export const WORKER_STATE = {
   DONE: 2,
   ERROR: 3,
 };
+
+export const SUPPORTED_INPUT = ["image/jpeg", "image/jpg", "image/png"];
