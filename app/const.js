@@ -6,4 +6,9 @@ export const WORKER_STATE = {
   ERROR: 3,
 };
 
-export const SUPPORTED_INPUT = ["image/jpeg", "image/jpg", "image/png"];
+export const SUPPORTED_INPUT = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+];
