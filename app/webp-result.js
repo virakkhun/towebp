@@ -19,7 +19,7 @@ templ.innerHTML = `
 </div>
 
 <div class="action flex row gap-sm">
-  <button class="btn flat {id}">
+  <button class="btn flat p-{id}">
     <img src="./public/svg/pointing-out.svg" width="20" height="20" />
   </button>
   <button type="button" class="btn flat d-{id}">
@@ -41,11 +41,12 @@ export class WebPResult {
    **/
   new(url, fileSize, name) {
     const item = this.#itemRef;
-    const innerHTML = this.#buildTemplate(url, fileSize, name);
+    const id = this.#makeId(name);
+    const innerHTML = this.#buildTemplate(url, fileSize, name, id);
     item.innerHTML = innerHTML;
     this.#el.appendChild(item);
-    this.#setupBtnPreview(url, fileSize, name);
-    this.#setupDownloadBtn(url, name);
+    this.#setupBtnPreview(url, fileSize, name, id);
+    this.#setupDownloadBtn(url, name, id);
   }
 
   feedbackOnError(name, msg) {
@@ -65,9 +66,10 @@ export class WebPResult {
    * @param {string} url
    * @param {number} fileSize
    * @param {string} name
+   * @param {string} id
    **/
-  #setupBtnPreview(url, fileSize, name) {
-    const selector = `.${name.replace(".webp", "")}`;
+  #setupBtnPreview(url, fileSize, name, id) {
+    const selector = `.p-${id}`;
     const btn = this.#el.querySelector(selector);
 
     btn.addEventListener("click", () => {
@@ -82,9 +84,10 @@ export class WebPResult {
   /**
    * @param {string} url
    * @param {string} name
+   * @param {string} id
    **/
-  #setupDownloadBtn(url, name) {
-    const selector = `.d-${name.replace(".webp", "")}`;
+  #setupDownloadBtn(url, name, id) {
+    const selector = `.d-${id}`;
     const btn = this.#el.querySelector(selector);
 
     btn.addEventListener("click", () => {
@@ -108,12 +111,18 @@ export class WebPResult {
    * @param {string} src
    * @param {number} fileSize
    * @param {string} name
+   * @param {string} id
    **/
-  #buildTemplate(src, fileSize, name) {
+  #buildTemplate(src, fileSize, name, id) {
     return templ.innerHTML
       .replace(/{src}/g, src)
       .replace(/{fileSize}/g, fileSize)
       .replace(/{name}/g, name)
-      .replace(/{id}/g, name.replace(".webp", ""));
+      .replace(/{id}/g, id);
+  }
+
+  /** @param {string} data */
+  #makeId(data) {
+    return data.replace(/(\s+|\.)/g, "_");
   }
 }

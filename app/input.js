@@ -1,5 +1,5 @@
 export class InputCtrl {
-  el = document.getElementById("file");
+  #el = document.getElementById("file");
 
   /**
    * @typedef {Object} Callback
@@ -8,7 +8,7 @@ export class InputCtrl {
    * @param {Callback} callback
    */
   onChange(callback) {
-    this.el.addEventListener("change", (e) => {
+    this.#el.addEventListener("change", (e) => {
       e.preventDefault();
       e.stopImmediatePropagation();
 

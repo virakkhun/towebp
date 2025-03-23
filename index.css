@@ -72,6 +72,7 @@ body {
   align-items: center;
   flex-direction: column;
   gap: var(--v-md);
+  text-align: center;
 }
 
 .converter {
@@ -292,7 +293,7 @@ body {
   padding: 4px var(--v-sm);
   color: var(--sub-bg);
   background: var(--sub-text);
-  border-radius: var(--v-sm);
+  border-radius: 4px;
 }
 
 .image {

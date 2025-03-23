@@ -1,5 +1,5 @@
 BIN = emcc
-FLAGS = -O3 -s WASM=1 -s ENVIRONMENT=worker -s MODULARIZE=1 -s EXPORTED_FUNCTIONS='["_version", "_to_webp", "_malloc", "_free", "_free_webp_buffer"]' -I libwebp -s ALLOW_MEMORY_GROWTH=1 -s ENVIRONMENT=worker -s EXPORT_ES6=1 -s MODULARIZE=1
+FLAGS = -O3 -s WASM=1 -s EXPORT_ES6=1 -s ENVIRONMENT=worker -s MODULARIZE=1 -s EXPORTED_FUNCTIONS='["_version", "_to_webp", "_malloc", "_free", "_free_webp_buffer"]' -I libwebp -s ALLOW_MEMORY_GROWTH=1
 
 SRCS = webp.c \
     libwebp/src/dec/*.c \
