@@ -6,8 +6,8 @@
 
 :root {
   @media (prefers-color-scheme: dark) {
-    --bg-transparent: #89b4fa0a;
-    --bg: #1e1e2e;
+    --bg-transparent: #eff1f50c;
+    --bg: #1c1c6a;
     --sub-bg: #1e2030;
     --text: #cdd6f4;
     --sub-text: #bac2de;
@@ -17,7 +17,7 @@
 
   @media (prefers-color-scheme: light) {
     --bg-transparent: #8839ef0a;
-    --bg: #eff1f5;
+    --bg: #d6e1f7;
     --sub-bg: #e6e9ef;
     --text: #4c4f69;
     --sub-text: #5c5f77;
@@ -34,7 +34,6 @@
 
 html,
 body {
-  background: var(--bg);
   font-family:
     system-ui,
     -apple-system,
@@ -48,6 +47,10 @@ body {
     "Helvetica Neue",
     sans-serif;
   color: var(--text);
+  background: var(--bg);
+  background-image: url("./public/noise-light.png");
+  -webkit-font-smoothing: antialiased;
+  transition: all 0.3s ease;
 }
 
 .text.primary {
@@ -118,15 +121,28 @@ body {
 .result {
   margin: 0 auto;
   width: 90%;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: var(--v-sm);
 }
 
 .result .item {
-  border-bottom: 1px solid var(--accent);
   display: grid;
   grid-template-columns: 15% 70% 15%;
   align-items: center;
   overflow: hidden;
-  padding: 8px;
+  padding: var(--v-md);
+  background: var(--bg-transparent);
+  backdrop-filter: blur(var(--v-md));
+  border-radius: var(--v-sm);
+  transform: translateY(10%);
+  opacity: 0;
+}
+
+.result .item.active {
+  opacity: 1;
+  transform: translateY(0%);
+  transition: all 0.3s ease;
 }
 
 .img-wrapper {
@@ -211,6 +227,7 @@ body {
   padding: 4px var(--v-md);
   background: var(--primary);
   color: var(--sub-bg);
+  z-index: 9999;
   position: fixed;
   left: 50%;
   bottom: -100%;

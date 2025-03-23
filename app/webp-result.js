@@ -31,6 +31,7 @@ templ.innerHTML = `
 export class WebPResult {
   #el = document.querySelector(".result");
   #dialog = new Dialog();
+  #timeoutId = 0;
 
   constructor() {}
 
@@ -47,6 +48,11 @@ export class WebPResult {
     this.#el.appendChild(item);
     this.#setupBtnPreview(url, fileSize, name, id);
     this.#setupDownloadBtn(url, name, id);
+
+    if (this.#timeoutId) clearTimeout(this.#timeoutId);
+    this.#timeoutId = setTimeout(() => {
+      item.classList.add("active");
+    });
   }
 
   feedbackOnError(name, msg) {
@@ -60,6 +66,11 @@ export class WebPResult {
 `;
 
     this.#el.appendChild(item);
+
+    if (this.#timeoutId) clearTimeout(this.#timeoutId);
+    this.#timeoutId = setTimeout(() => {
+      item.classList.add("active");
+    });
   }
 
   /**
