@@ -247,6 +247,7 @@ body {
 }
 
 .dialog {
+  z-index: 9998;
   width: 100%;
   height: 100svh;
   position: fixed;
@@ -266,6 +267,8 @@ body {
 }
 
 .container {
+  z-index: 9999;
+  position: relative;
   width: 90svw;
   height: 70svh;
   background: var(--bg-transparent);
@@ -295,6 +298,20 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+}
+
+.container .close {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  outline: none;
+  border: none;
+  font-size: 12px;
+  background: var(--sub-text);
+  color: var(--sub-bg);
+  padding: 2px var(--v-sm);
+  border-radius: 0px var(--v-md) 0px var(--v-sm);
+  width: fit-content;
 }
 
 .badge {
@@ -346,4 +363,42 @@ body {
   .container {
     width: 50%;
   }
+}
+
+.mesh {
+  position: fixed;
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.mesh.one {
+  border-radius: 9999px;
+  width: 300px;
+  height: 300px;
+  background: var(--primary);
+  top: -5%;
+  left: -10%;
+  opacity: 0.3;
+}
+
+.mesh.two {
+  border-radius: 0px;
+  width: 90%;
+  height: 70%;
+  background: var(--accent);
+  top: 50%;
+  left: 50%;
+  opacity: 0.1;
+  translate: -50% -50%;
+}
+
+.mesh.three {
+  border-radius: 9999px;
+  width: 300px;
+  height: 300px;
+  background: var(--primary);
+  bottom: -5%;
+  right: -10%;
+  opacity: 0.3;
 }

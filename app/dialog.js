@@ -25,14 +25,16 @@ export class Dialog {
     this.#el.appendChild(this.#container);
     this.#container.classList.add("container");
     this.#container.innerHTML = `
-<h1 class="title">${config.name}</h1>
-<div class="badge">
-  <p class="item">${config.size}</p>
-  <p class="item">WebP</p>
-</div>
-<div class="image">
-  <img src="${config.url}" />
-</div>
+      <h1 class="title">${config.name}</h1>
+      <div class="badge">
+        <p class="item">${config.size}</p>
+        <p class="item">WebP</p>
+      </div>
+      <div class="image">
+        <img src="${config.url}" />
+      </div>
+
+      <p class="close">click anywhere to close</p>
 `;
     setTimeout(() => {
       this.#el.classList.add("active");
