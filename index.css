@@ -415,3 +415,13 @@ body {
   font-weight: 500;
   text-decoration: underline;
 }
+
+.progress-bar {
+  position: fixed;
+  left: 0%;
+  top: 0;
+  background: var(--sub-text);
+  width: var(--v-sm);
+  border-radius: var(--v-sm);
+  transition: all 0.3s linear;
+}

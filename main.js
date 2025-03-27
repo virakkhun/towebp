@@ -7,6 +7,7 @@ import { WORKER_STATE } from "./app/const.js";
 import { Feedback } from "./app/feedback.js";
 import { FileCtrl } from "./app/file-ctrl.js";
 import { SupportedInputBadge } from "./app/supported-input-badge.js";
+import { ProgressBar } from "./app/progress-bar.js";
 
 new SupportedInputBadge();
 const worker = new Worker("./worker.js");
@@ -16,11 +17,13 @@ const result = new WebPResult();
 const dragDrop = new DragDrop();
 const inputCtrl = new InputCtrl();
 const fileCtrl = new FileCtrl();
+const progress = new ProgressBar();
 
 /** @type {{fn: (files: FileList) => void}} */
 const SetupFiles = {
   fn: (files) => {
     fileCtrl.setFiles(files, (file) => {
+      progress.start(fileCtrl.total);
       feedback.show("converting...");
       worker.postMessage(
         buildWorkerInput({
@@ -55,6 +58,7 @@ worker.onmessage = ({ data }) => {
   const nextAble = [WORKER_STATE.DONE, WORKER_STATE.ERROR].includes(out.state);
   if (fileCtrl.maxIndex !== fileCtrl.index && nextAble) {
     fileCtrl.next((file) => {
+      progress.update(fileCtrl.completed);
       worker.postMessage(
         buildWorkerInput({
           file,
@@ -70,6 +74,7 @@ worker.onmessage = ({ data }) => {
       out.result.error,
     );
     fileCtrl.incrementCompleted();
+    progress.update(fileCtrl.completed);
   }
 
   if (fileCtrl.total === fileCtrl.completed && nextAble) {
