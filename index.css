@@ -402,3 +402,16 @@ body {
   right: -10%;
   opacity: 0.3;
 }
+
+.help {
+  position: fixed;
+  bottom: var(--v-md);
+  right: var(--v-md);
+}
+
+.help .issue {
+  color: var(--sub-text);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: underline;
+}

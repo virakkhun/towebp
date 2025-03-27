@@ -134,6 +134,6 @@ export class WebPResult {
 
   /** @param {string} data */
   #makeId(data) {
-    return data.replace(/(\s+|\.)/g, "_");
+    return data.replace(/[^\w+]/g, "_");
   }
 }
