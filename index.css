@@ -48,7 +48,6 @@ body {
     sans-serif;
   color: var(--text);
   background: var(--bg);
-  background-image: url("./public/noise-light.png");
   -webkit-font-smoothing: antialiased;
   transition: all 0.3s ease;
 }
