@@ -40,4 +40,5 @@ jobs:
           scp -o StrictHostKeyChecking=no -i ~/.ssh/r101_linode conf.d/towebp.conf $VPS_USER@$VPS_HOST:/etc/nginx/conf.d/towebp.rakdotdev.space.conf
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/r101_linode $VPS_USER@$VPS_HOST \
             IMAGE_TAG=${{ github.sha }} docker compose -f towebp-docker-compose.yml up -d \
-            systemctl reload nginx
+            whoami \
+            nginx -s reload
