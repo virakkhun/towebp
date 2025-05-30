@@ -8,26 +8,34 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    permissions:
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Artifacts
-        uses: actions/upload-pages-artifact@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          path: "."
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/towebp.rakdotdev.space:${{ github.sha }}
+
+      - name: Trigger new deployment
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          mkdir ~/.ssh
+          echo "$PRIVATE_KEY" > ~/.ssh/r101_linode
+          chmod 400 ~/.ssh/r101_linode
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/r101_linode infra/docker-compose.yml $VPS_USER@$VPS_HOST:~/towebp-docker-compose.yml
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/r101_linode $VPS_USER@$VPS_HOST \
+            IMAGE_TAG=${{ github.sha }} docker compose -f towebp-docker-compose.yml up -d
